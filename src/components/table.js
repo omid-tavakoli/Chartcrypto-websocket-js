@@ -1,14 +1,35 @@
 import { useState, useEffect } from "react";
 import { getAllData } from "../service/crud";
 import Loading from '../components/loading';
-import {webSocket} from '../service/webSocket'
+import {ws} from '../service/webSocket'
 export default function Table() {
-  // webSocket.onmessage = (e) => {console.log(e)}
   const [data, setData] = useState();
   const [error, setError] = useState({
     massage: "",
     bool: false,
 })
+useEffect(() => {
+  if(data){
+    ws.onmessage = function(event) {
+      const dataArray = [event.data]
+      dataArray.forEach(item => {
+        const repWebsocket = JSON.parse(item)
+        const nameArz = Object.keys(repWebsocket)     
+        const newPrice = Object.values(repWebsocket) 
+        const newData = [...data]
+        newData.map((e) => {
+          if(e.id == nameArz && e.priceUsd != newPrice){
+            console.log(e.id ,e.priceUsd )
+            console.log(e.id , newPrice , "new")
+            e.priceUsd = newPrice
+            setData(newData)
+          }
+        })    
+      });
+    }
+  }
+  } , [data])
+
   useEffect(() => {
     const TakeAllData = async () => {
       try {
@@ -24,10 +45,10 @@ export default function Table() {
     TakeAllData();
   }, []);
   const renderData = () => {
-    let renderData = <Loading/>
+    let renderData = <tr><td colSpan="4"><Loading/></td></tr>
     if (error.bool) {
         const err = error.massage
-        renderData = err
+        renderData = <tr><td colSpan="4">{err}</td></tr>
     }
     if (data) {
         renderData = data.map((e) => ( 
