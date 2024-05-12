@@ -19,9 +19,8 @@ useEffect(() => {
         const newData = [...data]
         newData.map((e) => {
           if(e.id == nameArz && e.priceUsd != newPrice){
-            console.log(e.id ,e.priceUsd )
-            console.log(e.id , newPrice , "new")
             e.priceUsd = newPrice
+            e.background = 'active'
             setData(newData)
           }
         })    
@@ -52,19 +51,19 @@ useEffect(() => {
     }
     if (data) {
         renderData = data.map((e) => ( 
-                <tr  key={e.id} className="border-b border-gray-200 dark:border-gray-700">
+                <tr  key={e.id} className={`border-b border-gray-200 dark:border-gray-700 ${(e.background) ? 'animate-changeBackground' : 'bg-white' }`}>
                   <th
                     scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800"
+                    className="px-6 py-4 font-medium  whitespace-nowrap  text-white bg-gray-800"
                   >
                     {e.name}
                   </th>
-                  <td className="px-6 py-4">{parseFloat(e.priceUsd).toFixed(2)}</td>
-                  <td className="px-6 py-4 bg-gray-50">{ parseFloat(e.marketCapUsd).toFixed(2)}</td>
-                  <td className="px-6 py-4">{parseFloat(e.vwap24Hr).toFixed(2)}</td>
-                  <td className="px-6 py-4 bg-gray-50">{parseFloat(e.supply).toFixed(2)}</td>
-                  <td className="px-6 py-4">{parseFloat(e.volumeUsd24Hr).toFixed(2)}</td>
-                  <td className="px-6 py-4 bg-gray-50">{parseFloat(e.changePercent24Hr).toFixed(2)}</td>
+                  <td className={`px-6 py-4 ${(e.background) ? 'animate-changeBackground' : 'bg-gray-50' }`}>{parseFloat(e.priceUsd).toFixed(2)}</td>
+                  <td >{ parseFloat(e.marketCapUsd).toFixed(2)}</td>
+                  <td className={`px-6 py-4 ${(e.background) ? 'animate-changeBackground' : 'bg-gray-50' }`}>{parseFloat(e.vwap24Hr).toFixed(2)}</td>
+                  <td className="px-6 py-4">{parseFloat(e.supply).toFixed(2)}</td>
+                  <td className={`px-6 py-4 ${(e.background) ? 'animate-changeBackground' : 'bg-gray-50' }`}>{parseFloat(e.volumeUsd24Hr).toFixed(2)}</td>
+                  <td className="px-6 py-4">{parseFloat(e.changePercent24Hr).toFixed(2)}</td>
                 </tr>
         ))
     }
